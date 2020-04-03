@@ -16,6 +16,7 @@ case class asd(as: String, sas: Int, timestamp: Long)
 
 object layOne {
   def kafak(): Unit = {
+
     val env = StreamExecutionEnvironment.getExecutionEnvironment
     env.setParallelism(1)
     val properties = new Properties()
