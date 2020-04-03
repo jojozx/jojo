@@ -1,7 +1,8 @@
 package cpm.jd.hotitems_analysis
 
-import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
-import org.apache.flink.api.scala._
+
+
+import org.apache.flink.streaming.api.scala._
 case  class UserBehavior(UserId :Long ,itemId :Long ,categoryId:Integer ,behavior:String,timestamp :Long )
 case class ItemViewCount(itemId :Long ,windowEnd:Long ,Count :Long)
 object Hotitems {
