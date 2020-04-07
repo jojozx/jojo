@@ -1,7 +1,7 @@
 package cpm.jd.hotitems_analysis
 
 
-import org.springframework.beans.factory.annotation.Value
+
 import org.apache.flink.streaming.api.scala._
 
 
@@ -14,8 +14,7 @@ object Hotitems {
   def main(args: Array[String]): Unit = {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
     env.setParallelism(1)
-    @Value("${asd}")
-    var someThing : String=null
+
 
     val dataStream = env.readTextFile("D:\\workspac\\UserBehaviorAnalysis\\HotItemsAnalysis\\src\\main\\resources\\UserBehavior.csv")
     val UserBeHaviorStream = dataStream.map(data => {

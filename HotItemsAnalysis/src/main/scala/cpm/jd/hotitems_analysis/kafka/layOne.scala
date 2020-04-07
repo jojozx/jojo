@@ -1,9 +1,9 @@
 package cpm.jd.hotitems_analysis.kafka
 
-import java.sql.{Connection, DriverManager, PreparedStatement}
+
 import java.util.Properties
 
-import com.alibaba.fastjson.JSON
+
 import org.apache.flink.api.common.serialization.{DeserializationSchema, SimpleStringSchema}
 import org.apache.flink.streaming.api.scala._
 
