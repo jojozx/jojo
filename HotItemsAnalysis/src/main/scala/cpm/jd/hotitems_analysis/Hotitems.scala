@@ -52,27 +52,28 @@ object Hotitems {
     env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime)
 
     val properties =new Properties()
-    properties.setProperty("bootstrap.servers","localhost:9092")
-    properties.setProperty("group.id","consumer-group")
-    properties.setProperty("key.deserializer","org.apache.kafka.common.serialization.StringDeserializer")
+    properties.setProperty("bootstrap.servers", "localhost:9092")
+    properties.setProperty("group.id", "consumer-group")
+    properties.setProperty("key.deserializer",
+      "org.apache.kafka.common.serialization.StringDeserializer")
     properties.setProperty("value.deserializer","org.apache.kafka.common.serialization.StringDeserializer")
     properties.setProperty("auto.offset.reset", "latest")
-//   kafka数据源
- val dataStream=  env.addSource(new FlinkKafkaConsumer[String]("hotitems",new SimpleStringSchema(),properties))
 
-     // val dataStream = env.readTextFile("D:\\workspac\\UserBehaviorAnalysis\\HotItemsAnalysis\\src\\main\\resources\\UserBehavior.csv")
+    //   kafka数据源
+// val dataStream=  env
+//   .addSource(new FlinkKafkaConsumer[String]("hotitems", new SimpleStringSchema(), properties))
+    val dataStream = env.readTextFile("D:\\workspac\\UserBehaviorAnalysis\\HotItemsAnalysis\\src\\main\\resources\\UserBehavior.csv")
         .map(data => {
           val arrayStream = data.split(",")
           UserBehavior(arrayStream(0).trim.toLong, arrayStream(1).trim.toLong, arrayStream(2).trim.toInt, arrayStream(3).trim, arrayStream(4).trim.toLong)
         }).assignAscendingTimestamps(_.timeStamp )
-
+    dataStream.print()
       val processedStream=dataStream.filter(_.hehavior == "pv").keyBy(_.itemId)
         .timeWindow(Time.seconds(2),Time.seconds(1))
         .aggregate(new CountAgg(),new WindowResult())
         .keyBy(_.windowEnd)
         .process(new TopNHotItem(3) )
       processedStream.print()
-      Thread.sleep(1000)
       env.execute("hot items job")
 
 

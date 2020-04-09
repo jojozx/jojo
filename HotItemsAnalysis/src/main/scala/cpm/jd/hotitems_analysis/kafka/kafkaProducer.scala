@@ -1,13 +1,11 @@
 package cpm.jd.hotitems_analysis.kafka
 
 import java.util.Properties
-
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 
 object kafkaProducerTest {
   def main(args: Array[String]): Unit = {
     writeToKafka("hotitems")
-
   }
 
   def writeToKafka(topic: String): Unit = {
@@ -19,9 +17,11 @@ object kafkaProducerTest {
     val producer = new KafkaProducer[String, String](properties)
     val bufferedSource = io.Source.fromFile("D:\\workspac\\UserBehaviorAnalysis\\HotItemsAnalysis\\src\\main\\resources\\UserBehavior.csv")
     for (line <- bufferedSource.getLines()) {
+      println(line)
+
       val record = new ProducerRecord[String, String](topic, line)
-      producer.send(record)
+     producer.send(record)
     }
-     producer.close()
+    producer.close()
   }
 }
