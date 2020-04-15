@@ -95,7 +95,7 @@ class CountAgg() extends AggregateFunction[UserBehavior,Long,Long]{
 
   override def merge(acc: Long, acc1: Long): Long = acc+acc1
 }
-//自定义预集合函数求平均数
+//自定义预聚合函数求平均数
 
 class AvergeAgg()extends AggregateFunction[UserBehavior,(Long ,Int),Double] {
   override def createAccumulator(): (Long, Int) = (0L,0)
