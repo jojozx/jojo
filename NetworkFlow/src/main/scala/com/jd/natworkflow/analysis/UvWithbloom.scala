@@ -31,7 +31,7 @@ object UvWithbloom {
       .filter(_.behavior == "pv")
       .map(data => ("dummtKey", data.userId))
       .keyBy(_._1)
-      .timeWindow(Time.hours(1), Time.seconds(3))
+      .timeWindow(Time.hours(1),Time.seconds(2))
       .trigger(new MyTrigger())
       .process(new UvCountWithBloon())
 
@@ -69,16 +69,25 @@ class Bloom (size: Long) extends Serializable {
 }
 class UvCountWithBloon() extends ProcessWindowFunction[(String ,Long),UvCount,String,TimeWindow]{
   //redis
-  lazy val jedis=new Jedis("",6379)
-  lazy val bloom=new Bloom(1<<92)
+  lazy val jedis=new Jedis("localhost",6379)
+  lazy val bloom=new Bloom(1<<29)
 
-  override def process(key: String, context: ProcessWindowFunction[(String, Long), UvCount, String, TimeWindow]#Context, iterable: lang.Iterable[(String, Long)], collector: Collector[UvCount]): Unit = {
+  override def process(key: String, context: Context, elements: Iterable[(String, Long)], out: Collector[UvCount]): Unit = {
     val storeKey=context.window.getEnd.toString
     var Count =0L
-    var jedisKey:String=jedis.hget("count",storeKey)
+    val jedisKey:String=jedis.hget("count",storeKey)
     if(jedisKey!=null){
-         Count =jedisKey.toLong
+      Count =jedisKey.toLong
     }
-    val
+    val userId=elements.last._2.toString
+    val offset=bloom.hash(userId,61)
+    val isExist=jedis.getbit(storeKey,offset)
+    if(!isExist){
+      jedis.setbit(storeKey,offset,true)
+      jedis.hset("conut",storeKey,(Count+1).toString)
+      out.collect(UvCount(storeKey.toLong,Count+1))
+    }else{
+      out.collect(UvCount(storeKey.toLong,Count))
+    }
   }
 }

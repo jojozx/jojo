@@ -4,11 +4,11 @@ import java.text.SimpleDateFormat
 
 import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.scala._
-import org.apache.flink.streaming.api.windowing.time.Time
 
-case class ApacheLogEvent(ip: String, userId: String, eventTime: Long, metgod: String, url: String)
 
-case class UrlViewCount(url: String, windowEnd: Long, count: Long)
+//case class ApacheLogEvent(ip: String, userId: String, eventTime: Long, metgod: String, url: String)
+//
+//case class UrlViewCount(url: String, windowEnd: Long, count: Long)
 
 object PageView {
   def main(args: Array[String]): Unit = {
