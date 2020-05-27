@@ -1,6 +1,7 @@
 package com.jd.natworkflow.analysis
 
 
+import java.lang.ArrayIndexOutOfBoundsException
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 
@@ -45,6 +46,10 @@ object NetworkFlow {
       .keyBy(_.windowEnd)
       .process(new TopNHotUrls(10))
     println(dataStream)
+    try{}catch {
+      case e: ArithmeticException => println(e)
+
+    }
     env.execute("Network Flow")
   }
 }

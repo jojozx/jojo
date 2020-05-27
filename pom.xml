@@ -12,12 +12,7 @@
         <module>HotItemsAnalysis</module>
         <module>NetworkFlow</module>
     </modules>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.6.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
+
     <properties>
         <flink.version>1.7.2</flink.version>
         <scala.binary.version>2.11</scala.binary.version>
@@ -28,7 +23,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.68</version>
+            <version>1.2.6</version>
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
