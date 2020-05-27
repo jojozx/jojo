@@ -46,8 +46,9 @@ object NetworkFlow {
       .process(new TopNHotUrls(10))
     println(dataStream)
     try{}catch {
-      case e: ArithmeticException => println(e)
 
+      case e:RuntimeException =>print(e)
+      case e: Exception => println(e)
     }
     env.execute("Network Flow")
   }
