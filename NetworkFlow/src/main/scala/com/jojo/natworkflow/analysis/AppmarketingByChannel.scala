@@ -1,4 +1,4 @@
-package com.jd.natworkflow.analysis
+package com.jojo.natworkflow.analysis
 
 import org.apache.flink.api.common.state.StateTtlConfig.TimeCharacteristic
 import org.apache.flink.streaming.api.scala._
