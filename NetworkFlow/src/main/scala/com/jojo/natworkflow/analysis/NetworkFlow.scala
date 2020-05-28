@@ -1,6 +1,6 @@
 package com.jojo.natworkflow.analysis
 
-import java.lang.ArrayIndexOutOfBoundsException
+
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 
@@ -27,8 +27,9 @@ object NetworkFlow {
     env.setParallelism(1)
     env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime)
 
-    val dataStream = env.readTextFile("D:\\workspac\\UserBehaviorAnalysis\\NetworkFlow\\src\\main\\resources\\apache.log")
-      .map(data => {
+    val dataStream :DataStream[String]= env.readTextFile("D:\\workspac\\UserBehaviorAnalysis\\NetworkFlow\\src\\main\\resources\\apache.log")
+
+      dataStream.map(data => {
         val dataArray = data.split(" ")
         val simpleDateFormat = new SimpleDateFormat("dd/MM/yyy:HH:mm:ss")
         val timeStamp = simpleDateFormat.parse(dataArray(2).trim).getTime
@@ -39,8 +40,8 @@ object NetworkFlow {
           element.eventTime
         }
       }).keyBy(_.url)
-      .timeWindow(Time.minutes(10), Time.seconds(5))
-      .allowedLateness(Time.seconds(60))
+      .timeWindow(Time.minutes(10))
+      .allowedLateness(Time.milliseconds(60))
       .aggregate(new CountAgg(), new windowResult())
       .keyBy(_.windowEnd)
       .process(new TopNHotUrls(10))
